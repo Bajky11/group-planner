@@ -30,6 +30,15 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
     }
   }, [selectedDateRanges, onDatesChange]);
 
+  // Aktualizace vybraných datumů při změně initialData
+  useEffect(() => {
+    if (hasMounted.current) {
+      setSelectedDateRanges(initialData || []);
+    } else {
+      hasMounted.current = true;
+    }
+  }, [initialData]);
+
   const onChange = (newValue) => {
     setValue(newValue);
     if (newValue.length === 2) {
@@ -59,7 +68,7 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
               style={{
                 height: "100%", // Výška prveku je 100% rodiče
                 width: "150%", // Šířka prveku je 100% rodiče
-                backgroundColor: color, // Nastavuje barvu pozadí
+                backgroundColor: "red", // Nastavuje barvu pozadí
                 opacity: 1, // Nastavuje průhlednost na plnou (1)
                 position: 'relative', // Použijeme absolutní pozicování
                 left: '-10px',            // Div začne na levém okraji buňky

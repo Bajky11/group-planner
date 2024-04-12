@@ -8,6 +8,7 @@ import MainScreen from "./modules/frontend/screens/MainScreen";
 
 function App() {
   return (
+    //<Router basename="/group-planner">
     <Router>
       <Routes>
         <Route path="/" element={<LoginScreen />} />

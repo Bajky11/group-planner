@@ -4,6 +4,7 @@ import CustomCalendar from "../components/CustomCalendar";
 import Drawer from "../components/Drawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
 import { Typography } from "@mui/material";
+import { convertFirestoreTimestampsToDates } from "../functions/convertFirestoreTimestampsToDates";
 import { fetchDocumentsByIds } from "../../backend/fetchDocumentsByIds";
 import { useLocation } from "react-router-dom";
 
@@ -11,6 +12,7 @@ const GroupScreen = () => {
   const location = useLocation();
   const group = location.state?.group;
   const [groupUsers, setGroupUsers] = useState([]);
+  const [initialData, setInitialData] = useState([]);
 
   // Assuming setGroups is defined in your component to update the state with fetched groups
   useEffect(() => {
@@ -35,6 +37,14 @@ const GroupScreen = () => {
     };
   }, []); // Dependency array includes user.groups
 
+  useEffect(() => {
+    
+    // Předpokládám, že každý uživatel má vlastnost `dates`, která je polem datumů
+    const groupUsersDates = groupUsers.map(user => convertFirestoreTimestampsToDates(user.dates) || []).flat();
+    setInitialData(groupUsersDates)
+    console.log(groupUsersDates); // Tento řádek vypíše nové pole s daty ze všech uživatelů
+  }, [groupUsers]);
+
   console.log(group);
   return (
     <FullScreenColorContainer
@@ -45,7 +55,7 @@ const GroupScreen = () => {
     >
       <Typography variant="h4">{group.name}</Typography>
       <Typography>ID: {group.id}</Typography>
-      <CustomCalendar />
+      <CustomCalendar initialData={initialData} />
       <Typography>Členové skupiny:</Typography>
       {groupUsers.map((user) => {
         return (
