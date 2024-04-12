@@ -1,12 +1,15 @@
-import { Calendar } from "react-calendar";
-import { Paper } from "@mui/material";
-import { Stack } from "@mui/material";
-import { useState } from "react";
+import "../styles/calendar.css";
 
-const CustomCalendar = () => {
+import { Paper, Stack } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+
+import { Calendar } from "react-calendar";
+
+const CustomCalendar = ({ onDatesChange, initialData }) => {
   const [value, setValue] = useState([]);
-  // Assuming selectedDateRanges includes user information and their color
-  const [selectedDateRanges, setSelectedDateRanges] = useState([]);
+  const [selectedDateRanges, setSelectedDateRanges] = useState(
+    initialData || []
+  );
 
   const addNewDateRange = (newRange, userColor) => {
     const newDateRange = {
@@ -14,47 +17,63 @@ const CustomCalendar = () => {
       end: newRange[1],
       color: userColor,
     };
-
     setSelectedDateRanges((prevRanges) => [...prevRanges, newDateRange]);
   };
+
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    if (hasMounted.current && onDatesChange) {
+      onDatesChange(selectedDateRanges);
+    } else {
+      hasMounted.current = true;
+    }
+  }, [selectedDateRanges, onDatesChange]);
 
   const onChange = (newValue) => {
     setValue(newValue);
     if (newValue.length === 2) {
-      // Example: Dynamically determining the color, e.g., based on user selection or other logic
+      const [start, end] =
+        newValue[0] < newValue[1]
+          ? [newValue[0], newValue[1]]
+          : [newValue[1], newValue[0]];
       const dynamicColor = `#${Math.floor(Math.random() * 16777215).toString(
         16
-      )}`; // Random color for demonstration
-      addNewDateRange(
-        newValue.sort((a, b) => a - b),
-        dynamicColor
-      );
+      )}`;
+      addNewDateRange([start, end], dynamicColor);
     }
   };
 
   const tileContent = ({ date, view }) => {
     if (view === "month") {
+      // Iteruje přes všechny vybrané datumové rozsahy
       for (const range of selectedDateRanges) {
         const { start, end, color } = range;
         const isInRange = date >= start && date <= end;
+
+        // Pokud je aktuální datum uvnitř nějakého z rozsahů
         if (isInRange) {
-          // Return a custom styled component or element to indicate selection
+          // Vrátí div prvek, který vyplní celé políčko kalendáře barvou
           return (
             <div
               style={{
-                height: "100%",
-                width: "100%",
-                backgroundColor: color,
-                opacity: 0.5,
+                height: "100%", // Výška prveku je 100% rodiče
+                width: "150%", // Šířka prveku je 100% rodiče
+                backgroundColor: color, // Nastavuje barvu pozadí
+                opacity: 1, // Nastavuje průhlednost na plnou (1)
+                position: 'relative', // Použijeme absolutní pozicování
+                left: '-10px',            // Div začne na levém okraji buňky
               }}
             ></div>
           );
         }
       }
     }
-    // Return null if not within any range to keep default tile content
+
+    // Vrátí null, pokud datum není v žádném vybraném rozsahu
     return null;
   };
+
   return (
     <Paper elevation={2}>
       <Stack paddingX={10} paddingY={10}>
@@ -62,8 +81,9 @@ const CustomCalendar = () => {
           onChange={onChange}
           selectRange
           tileContent={tileContent}
+          tileClassName={"calendarTile"}
           showDoubleView
-          disabled
+          disabled={false}
         />
       </Stack>
     </Paper>

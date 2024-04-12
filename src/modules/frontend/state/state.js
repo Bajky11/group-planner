@@ -1,9 +1,12 @@
-import { atom } from 'jotai';
+import { atom } from "jotai";
 
-export const userAtom = atom({
+export const defaultUserObject = {
   id: null,
-  username: '',
-  firstName: '',
-  lastName: '',
-  // Další uživatelská data, ale heslo nezahrnujte
-});
+  username: "",
+  firstName: "",
+  lastName: "",
+  groups: [],
+  dates: [],
+};
+
+export const userAtom = atom(defaultUserObject);

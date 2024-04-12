@@ -14,13 +14,13 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 import CryptoJS from "crypto-js";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
 import { db } from "../../.."; // Ujistěte se, že tato cesta je správná pro import instance Firestore
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { userAtom } from "../state/state";
 
 const LoginScreen = () => {
@@ -33,6 +33,13 @@ const LoginScreen = () => {
   });
   const [user, setUser] = useAtom(userAtom);
   const [isRegistration, setIsRegistration] = useState(false);
+
+  useEffect(() => {
+    if (user.id) {
+      console.log("Logged user: " + JSON.stringify(user));
+      navigate("/main");
+    }
+  }, [user, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,9 +70,9 @@ const LoginScreen = () => {
           username: userData.username,
           firstName: userData.firstName,
           lastName: userData.lastName,
+          groups: userData.groups,
+          dates: userData.dates,
         });
-
-        navigate("/main");
       } else {
         alert("Nesprávné přihlašovací údaje");
       }
@@ -87,6 +94,8 @@ const LoginScreen = () => {
         password: CryptoJS.SHA256(form.password).toString(CryptoJS.enc.Hex),
         firstName: form.firstName,
         lastName: form.lastName,
+        dates: [],
+        groups: []
       });
       console.log("Document written with ID: ", docRef.id);
       alert("Registrace proběhla úspěšně, nyní se můžete přihlásit");

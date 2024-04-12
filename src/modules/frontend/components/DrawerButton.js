@@ -1,14 +1,12 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 import { Link } from "react-router-dom";
 
-const DrawerButton = ({ title, onClick, linkTo }) => {
+const DrawerButton = ({ title, onClick, linkTo, group }) => {
   return (
-    <Link to={linkTo}>
-      <Stack component={Paper} padding={1} onClick={onClick}>
-        <Typography>{title}</Typography>
-      </Stack>
-    </Link>
+    <Button component={Link} to={linkTo} state={{ group }} onClick={onClick} style={{ justifyContent: "flex-start" }}>
+      <Typography>{title}</Typography>
+    </Button>
   );
 };
 

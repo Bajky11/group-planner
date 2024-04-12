@@ -6,6 +6,7 @@ const FullScreenColorContainer = ({
   justifyContent = "center",
   Drawer,
   children,
+  spacing,
 }) => {
   return (
     <div style={{ height: "100vh", display: "flex", flexDirection: "row" }}>
@@ -16,6 +17,7 @@ const FullScreenColorContainer = ({
         alignItems={alignItems}
         justifyContent={justifyContent}
         direction={"column"}
+        spacing={spacing}
       >
         {children}
       </Stack>
