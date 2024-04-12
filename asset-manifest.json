@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/group-planner/static/css/main.b9d53475.css",
-    "main.js": "/group-planner/static/js/main.309cb1bd.js",
+    "main.js": "/group-planner/static/js/main.be699eb0.js",
     "index.html": "/group-planner/index.html",
     "main.b9d53475.css.map": "/group-planner/static/css/main.b9d53475.css.map",
-    "main.309cb1bd.js.map": "/group-planner/static/js/main.309cb1bd.js.map"
+    "main.be699eb0.js.map": "/group-planner/static/js/main.be699eb0.js.map"
   },
   "entrypoints": [
     "static/css/main.b9d53475.css",
-    "static/js/main.309cb1bd.js"
+    "static/js/main.be699eb0.js"
   ]
 }
