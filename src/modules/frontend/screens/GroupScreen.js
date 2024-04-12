@@ -1,9 +1,10 @@
+import { Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
+import ColorPicker from "react-pick-color";
 import CustomCalendar from "../components/CustomCalendar";
 import Drawer from "../components/Drawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
-import { Typography } from "@mui/material";
 import { convertFirestoreTimestampsToDates } from "../functions/convertFirestoreTimestampsToDates";
 import { fetchDocumentsByIds } from "../../backend/fetchDocumentsByIds";
 import { useLocation } from "react-router-dom";
@@ -11,41 +12,47 @@ import { useLocation } from "react-router-dom";
 const GroupScreen = () => {
   const location = useLocation();
   const group = location.state?.group;
+  const groupMembersIds = group.test.map((item) => item.id);
   const [groupUsers, setGroupUsers] = useState([]);
   const [initialData, setInitialData] = useState([]);
+  const [color, setColor] = useState("#fff");
 
-  // Assuming setGroups is defined in your component to update the state with fetched groups
   useEffect(() => {
-    let isMounted = true; // Flag to track whether the component is still mounted
+    let isMounted = true;
 
     const fetchUsers = async () => {
       try {
-        const users = await fetchDocumentsByIds("users", group.users);
+        const users = await fetchDocumentsByIds("users", groupMembersIds);
         if (isMounted) {
-          setGroupUsers(users);
+          const usersWithColors = users.map((user) => {
+            const colorObject = group.test.find((color) => color.id === user.id);
+            return {
+              ...user,
+              color: colorObject ? colorObject.color : undefined,
+            };
+          });
+          setGroupUsers(usersWithColors);
         }
       } catch (error) {
         console.error("Error fetching groups:", error);
-        // Optionally handle the error by setting an error state, etc.
       }
     };
 
     fetchUsers();
 
     return () => {
-      isMounted = false; // Set isMounted to false when the component unmounts
+      isMounted = false;
     };
-  }, []); // Dependency array includes user.groups
+  }, [groupMembersIds, group.test]); // Add the necessary dependencies here
 
   useEffect(() => {
-    
-    // Předpokládám, že každý uživatel má vlastnost `dates`, která je polem datumů
-    const groupUsersDates = groupUsers.map(user => convertFirestoreTimestampsToDates(user.dates) || []).flat();
-    setInitialData(groupUsersDates)
-    console.log(groupUsersDates); // Tento řádek vypíše nové pole s daty ze všech uživatelů
-  }, [groupUsers]);
+    const groupUsersDates = groupUsers.flatMap((user) =>
+      user.dates ? convertFirestoreTimestampsToDates(user.dates).map(date => ({ ...date, color: user.color })) : []
+    );
 
-  console.log(group);
+    setInitialData(groupUsersDates);
+  }, [groupUsers]); // React to changes in groupUsers only
+
   return (
     <FullScreenColorContainer
       alignItems={"center"}
@@ -57,13 +64,14 @@ const GroupScreen = () => {
       <Typography>ID: {group.id}</Typography>
       <CustomCalendar initialData={initialData} />
       <Typography>Členové skupiny:</Typography>
-      {groupUsers.map((user) => {
-        return (
+      {groupUsers.map((user, index) => (
+        <Stack key={user.id} direction={"row"} spacing={1} alignItems={"center"}>
+          <div style={{ backgroundColor: user.color || "grey", width: "10px", height: "10px" }}></div>
           <Typography>
             {user.firstName} {user.lastName} ({user.username})
           </Typography>
-        );
-      })}
+        </Stack>
+      ))}
     </FullScreenColorContainer>
   );
 };

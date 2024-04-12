@@ -16,7 +16,6 @@ import { userAtom } from "../state/state";
 const MainScreen = () => {
   const [user, setUser] = useAtom(userAtom);
   const initialData = convertFirestoreTimestampsToDates(user.dates);
-
   const handleSaveCalendar = (dates) => {
     // Check if 'dates' is not an empty object
     if (Object.keys(dates).length !== 0) {
@@ -40,6 +39,7 @@ const MainScreen = () => {
         onDatesChange={handleSaveCalendar}
         initialData={initialData}
       />
+      
     </FullScreenColorContainer>
   );
 };

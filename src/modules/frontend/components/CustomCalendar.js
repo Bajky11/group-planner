@@ -68,7 +68,7 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
               style={{
                 height: "100%", // Výška prveku je 100% rodiče
                 width: "150%", // Šířka prveku je 100% rodiče
-                backgroundColor: "red", // Nastavuje barvu pozadí
+                backgroundColor: color, // Nastavuje barvu pozadí
                 opacity: 1, // Nastavuje průhlednost na plnou (1)
                 position: 'relative', // Použijeme absolutní pozicování
                 left: '-10px',            // Div začne na levém okraji buňky

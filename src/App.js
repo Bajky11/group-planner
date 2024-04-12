@@ -6,9 +6,9 @@ import GroupScreen from "./modules/frontend/screens/GroupScreen";
 import LoginScreen from "./modules/frontend/screens/LoginScreen";
 import MainScreen from "./modules/frontend/screens/MainScreen";
 
+//<Router basename="/group-planner">
 function App() {
   return (
-    //<Router basename="/group-planner">
     <Router>
       <Routes>
         <Route path="/" element={<LoginScreen />} />
