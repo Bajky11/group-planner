@@ -5,38 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { Calendar } from "react-calendar";
 
-const CustomCalendar = ({ onDatesChange, initialData }) => {
+const CustomCalendar = ({ onDatesChange, dates }) => {
   const [value, setValue] = useState([]);
-  const [selectedDateRanges, setSelectedDateRanges] = useState(initialData);
-
-  const addNewDateRange = (newRange, userColor) => {
-    const newDateRange = {
-      start: newRange[0],
-      end: newRange[1],
-      color: userColor,
-    };
-    setSelectedDateRanges((prevRanges) => [...prevRanges, newDateRange]);
-  };
-
-  const hasMounted = useRef(false);
-
-  useEffect(() => {
-    if (hasMounted.current && onDatesChange) {
-      onDatesChange(selectedDateRanges);
-    } else {
-      hasMounted.current = true;
-    }
-  }, [selectedDateRanges, onDatesChange]);
-  /*
- // Aktualizace vybraných datumů při změně initialData
-  useEffect(() => {
-    if (hasMounted.current) {
-      setSelectedDateRanges(initialData || []);
-    } else {
-      hasMounted.current = true;
-    }
-  }, [initialData]);
-*/
 
   const onChange = (newValue) => {
     setValue(newValue);
@@ -48,14 +18,19 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
       const dynamicColor = `#${Math.floor(Math.random() * 16777215).toString(
         16
       )}`;
-      addNewDateRange([start, end], dynamicColor);
+      const newDate = {
+        start,
+        end,
+        color: dynamicColor,
+      };
+      onDatesChange([...dates, newDate])
     }
   };
 
   const tileContent = ({ date, view }) => {
     if (view === "month") {
       // Iteruje přes všechny vybrané datumové rozsahy
-      for (const range of selectedDateRanges) {
+      for (const range of dates) {
         const { start, end, color } = range;
         const isInRange = date >= start && date <= end;
 

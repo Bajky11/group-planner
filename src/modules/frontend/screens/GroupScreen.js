@@ -62,7 +62,7 @@ const GroupScreen = () => {
     >
       <Typography variant="h4">{group.name}</Typography>
       <Typography>ID: {group.id}</Typography>
-      <CustomCalendar initialData={initialData} />
+      <CustomCalendar dates={initialData} />
       <Typography>Členové skupiny:</Typography>
       {groupUsers.map((user, index) => (
         <Stack key={user.id} direction={"row"} spacing={1} alignItems={"center"}>

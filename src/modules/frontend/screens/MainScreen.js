@@ -19,7 +19,7 @@ const MainScreen = () => {
       console.log("No dates to update");
       return;
     }
-    //updateFirestoreDocument("users", user.id, { dates: updatedDates });
+    updateFirestoreDocument("users", user.id, { dates: updatedDates });
     setUser({ ...user, dates: updatedDates });
   }
 
@@ -27,7 +27,7 @@ const MainScreen = () => {
     const updatedDates = [...user.dates];
     updatedDates.splice(index, 1);
 
-    //updateFirestoreDocument("users", user.id, { dates: updatedDates });
+    updateFirestoreDocument("users", user.id, { dates: updatedDates });
     setUser({ ...user, dates: updatedDates });
 
     // Výpis pro kontrolu
@@ -46,7 +46,7 @@ const MainScreen = () => {
       <Typography variant="h4">Můj kalendář</Typography>
       <CustomCalendar
         onDatesChange={(updatedDates) => handleSaveCalendar(updatedDates)}
-        initialData={user.dates}
+        dates={user.dates}
       />
       <Typography>Kliknutím odstraníš záznam:</Typography>
       {user.dates.map((date, index) => (
