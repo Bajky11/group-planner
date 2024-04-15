@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 
 import CryptoJS from "crypto-js";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
+import { convertFirestoreTimestampsToDates } from "../functions/convertFirestoreTimestampsToDates";
 import { db } from "../../.."; // Ujistěte se, že tato cesta je správná pro import instance Firestore
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
@@ -71,7 +72,7 @@ const LoginScreen = () => {
           firstName: userData.firstName,
           lastName: userData.lastName,
           groups: userData.groups,
-          dates: userData.dates,
+          dates: convertFirestoreTimestampsToDates(userData.dates)
         });
       } else {
         alert("Nesprávné přihlašovací údaje");

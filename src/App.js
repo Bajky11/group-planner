@@ -1,4 +1,8 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 
 import GroupCreationScreen from "./modules/frontend/screens/GroupCreationScreen";
 import GroupJoinScreen from "./modules/frontend/screens/GroupJoinScreen";
@@ -8,6 +12,7 @@ import MainScreen from "./modules/frontend/screens/MainScreen";
 
 //<Router basename="/group-planner">
 function App() {
+
   return (
     <Router>
       <Routes>

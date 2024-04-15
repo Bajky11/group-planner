@@ -7,9 +7,7 @@ import { Calendar } from "react-calendar";
 
 const CustomCalendar = ({ onDatesChange, initialData }) => {
   const [value, setValue] = useState([]);
-  const [selectedDateRanges, setSelectedDateRanges] = useState(
-    initialData || []
-  );
+  const [selectedDateRanges, setSelectedDateRanges] = useState(initialData);
 
   const addNewDateRange = (newRange, userColor) => {
     const newDateRange = {
@@ -29,8 +27,8 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
       hasMounted.current = true;
     }
   }, [selectedDateRanges, onDatesChange]);
-
-  // Aktualizace vybraných datumů při změně initialData
+  /*
+ // Aktualizace vybraných datumů při změně initialData
   useEffect(() => {
     if (hasMounted.current) {
       setSelectedDateRanges(initialData || []);
@@ -38,6 +36,7 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
       hasMounted.current = true;
     }
   }, [initialData]);
+*/
 
   const onChange = (newValue) => {
     setValue(newValue);
@@ -70,8 +69,8 @@ const CustomCalendar = ({ onDatesChange, initialData }) => {
                 width: "150%", // Šířka prveku je 100% rodiče
                 backgroundColor: color, // Nastavuje barvu pozadí
                 opacity: 1, // Nastavuje průhlednost na plnou (1)
-                position: 'relative', // Použijeme absolutní pozicování
-                left: '-10px',            // Div začne na levém okraji buňky
+                position: "relative", // Použijeme absolutní pozicování
+                left: "-10px", // Div začne na levém okraji buňky
               }}
             ></div>
           );

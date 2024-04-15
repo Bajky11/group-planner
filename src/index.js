@@ -1,7 +1,5 @@
 import "./index.css";
 
-import { addDoc, collection } from "firebase/firestore";
-
 import App from "./App";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -32,4 +30,3 @@ export const db = getFirestore(app);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
-
