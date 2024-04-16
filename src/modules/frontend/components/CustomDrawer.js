@@ -55,8 +55,8 @@ const CustomDrawer = ({ open, toggle }) => {
 
   return (
     <Drawer
-      open={isLargeScreen ? true : open}
-      variant={isLargeScreen ? "permanent" : "temporary"}
+      open={open}
+      variant={isLargeScreen ?  "permanent" : "temporary"}
       onClose={toggle}
       ModalProps={{
         keepMounted: true, // Better performance on mobile devices.

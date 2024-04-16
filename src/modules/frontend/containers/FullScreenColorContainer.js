@@ -27,7 +27,7 @@ const FullScreenColorContainer = ({
         position: "relative",
       }}
     >
-      <CustomDrawer open={drawerOpen} toggle={toggleDrawer} />
+      {user.id && <CustomDrawer open={drawerOpen} toggle={toggleDrawer} />}
       {!drawerOpen && user.id && (
         <IconButton
           onClick={toggleDrawer}
