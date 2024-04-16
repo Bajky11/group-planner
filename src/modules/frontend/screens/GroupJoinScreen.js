@@ -1,70 +1,70 @@
+import React, { useState } from "react";
 import { Button, Paper, TextField, Typography } from "@mui/material";
-
 import Drawer from "../components/CustomDrawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
 import Grid from "@mui/material/Unstable_Grid2";
 import { generateRandomNonWhiteHexColor } from "../functions/generateRandomNonWhiteHexColor";
 import { updateArrayFieldInDocument } from "../../backend/updateArrayFieldInDocument";
 import { useAtom } from "jotai";
-import { useState } from "react";
 import { userAtom } from "../state/state";
+import { useNavigate } from "react-router-dom";
 
 const GroupJoinScreen = () => {
   const [text, setText] = useState("");
   const [user, setUser] = useAtom(userAtom);
+  const navigate = useNavigate();
 
-  const handleJoingroup = () => {
-    /*
-    updateArrayFieldInDocument("groups", text, "users", [user.id]).then(
-      (success) => {
-        if (success) {
-          console.log("The array was successfully updated.");
-          const updatedGroups = [...user.groups, text];
-          updateArrayFieldInDocument("users", user.id, "groups", [text])
-          setUser({ ...user, groups: updatedGroups });
+  const handleJoinGroup = async () => {
+    if (user.groups.find(groupId => groupId === text)) {
+      alert("V této skupině již jsi členem!")
+      return;
+    }
+    try {
+      const userGroups = getUserGroups();
+      const success = await updateGroupInDatabase();
+
+      if (success) {
+        const userUpdateSuccess = await handleUserUpdate(userGroups);
+
+        if (userUpdateSuccess) {
+          navigate("/main");
         } else {
-          console.log("Failed to update the array.");
-          alert("Nepodařilo se přidat do skupiny");
+          throw new Error("Failed to update the user's groups.");
         }
+      } else {
+        throw new Error("Failed to update the test array.");
       }
-    );*/
-    // Assuming text is the group ID and user.id is the current user's ID
-    // Assuming text is the group ID and user.id is the current user's ID
-    // Check if user.groups is iterable
-    const userGroups = Array.isArray(user.groups)
-      ? [...user.groups, text]
-      : [text];
+    } catch (error) {
+      console.error("Error:", error.message);
+      alert("Došlo k chybě. Akci nebylo možné dokončit.");
+    }
+  };
 
-    updateArrayFieldInDocument("groups", text, "users", [
-      { id: user.id, color: generateRandomNonWhiteHexColor() },
-    ])
-      .then((success) => {
-        if (success) {
-          console.log("The test array was successfully updated.");
-          // Update the user's document with the new group ID
-          updateArrayFieldInDocument(
-            "users",
-            user.id,
-            "groups",
-            userGroups
-          ).then((userUpdateSuccess) => {
-            if (userUpdateSuccess) {
-              // Set the user's state with the updated groups array
-              setUser({ ...user, groups: userGroups });
-            } else {
-              console.log("Failed to update the user's groups.");
-              alert("Nepodařilo se aktualizovat skupiny uživatele");
-            }
-          });
-        } else {
-          console.log("Failed to update the test array.");
-          alert("Nepodařilo se přidat do skupiny");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating document:", error);
-        alert("Chyba při aktualizaci dokumentu");
-      });
+  const getUserGroups = () => {
+    return Array.isArray(user.groups) ? [...user.groups, text] : [text];
+  };
+
+  const updateGroupInDatabase = async () => {
+    try {
+      await updateArrayFieldInDocument("groups", text, "users", [
+        { id: user.id, color: generateRandomNonWhiteHexColor() },
+      ]);
+      return true;
+    } catch (error) {
+      console.error("Error updating group document:", error.message);
+      return false;
+    }
+  };
+
+  const handleUserUpdate = async (userGroups) => {
+    try {
+      await updateArrayFieldInDocument("users", user.id, "groups", userGroups);
+      setUser({ ...user, groups: userGroups });
+      return true;
+    } catch (error) {
+      console.error("Error updating user document:", error.message);
+      return false;
+    }
   };
 
   return (
@@ -90,7 +90,7 @@ const GroupJoinScreen = () => {
             />
           </Grid>
           <Grid>
-            <Button variant="contained" onClick={handleJoingroup}>
+            <Button variant="contained" onClick={handleJoinGroup}>
               Připojit se
             </Button>
           </Grid>
