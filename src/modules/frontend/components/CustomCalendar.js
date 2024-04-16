@@ -1,12 +1,14 @@
 import "../styles/calendar.css";
 
-import { Paper, Stack } from "@mui/material";
+import { Paper, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 import { Calendar } from "react-calendar";
 
 const CustomCalendar = ({ onDatesChange, dates }) => {
   const [value, setValue] = useState([]);
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   const onChange = (newValue) => {
     setValue(newValue);
@@ -59,13 +61,13 @@ const CustomCalendar = ({ onDatesChange, dates }) => {
 
   return (
     <Paper elevation={2}>
-      <Stack paddingX={10} paddingY={10}>
+      <Stack paddingX={3} paddingY={3}>
         <Calendar
           onChange={onChange}
           selectRange
           tileContent={tileContent}
           tileClassName={"calendarTile"}
-          showDoubleView
+          showDoubleView = {isLargeScreen ? true: false}
           disabled={false}
         />
       </Stack>

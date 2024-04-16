@@ -3,10 +3,12 @@ import { TextField, Typography } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 
 import { Divider } from "@mui/material";
-import Drawer from "../components/Drawer";
+import Drawer from "../components/CustomDrawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
 import Grid from "@mui/material/Unstable_Grid2";
 import { addFirestoreDocument } from "../../backend/addFirestoreDocument";
+import { generateRandomNonWhiteHexColor } from "../functions/generateRandomNonWhiteHexColor";
+import { updateArrayFieldInDocument } from "../../backend/updateArrayFieldInDocument";
 import { updateFirestoreDocument } from "../../backend/updateFirestoreDocument";
 import { useAtom } from "jotai";
 import { userAtom } from "../state/state";
@@ -60,16 +62,13 @@ const GroupCreationScreen = () => {
     try {
       const groupId = await addFirestoreDocument("groups", {
         name: groupName,
-        users: [user.id],
+        users: [{ id: user.id, color: generateRandomNonWhiteHexColor() }],
       });
 
       const updatedGroups = [...user.groups, groupId];
-      await updateFirestoreDocument("users", user.id, {
-        groups: updatedGroups,
-      });
+      updateArrayFieldInDocument("users", user.id, "groups", [groupId]);
 
-      setUser({ ...user, groups: updatedGroups }); // Update local state to reflect change
-
+      setUser({ ...user, groups: updatedGroups });
 
       //TODO: Optionally, add group ID to each selected user's groups in the backend
     } catch (error) {

@@ -1,6 +1,6 @@
 import { Button, Paper, TextField, Typography } from "@mui/material";
 
-import Drawer from "../components/Drawer";
+import Drawer from "../components/CustomDrawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
 import Grid from "@mui/material/Unstable_Grid2";
 import { generateRandomNonWhiteHexColor } from "../functions/generateRandomNonWhiteHexColor";
@@ -35,7 +35,7 @@ const GroupJoinScreen = () => {
       ? [...user.groups, text]
       : [text];
 
-    updateArrayFieldInDocument("groups", text, "test", [
+    updateArrayFieldInDocument("groups", text, "users", [
       { id: user.id, color: generateRandomNonWhiteHexColor() },
     ])
       .then((success) => {

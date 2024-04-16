@@ -1,15 +1,27 @@
-import { Divider, Paper, Stack, Typography } from "@mui/material";
+import {
+  Divider,
+  Drawer,
+  IconButton,
+  Paper,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { defaultUserObject, userAtom } from "../state/state";
 import { useEffect, useState } from "react";
 
 import CustomAvatar from "./CustomAvatar";
 import DrawerButton from "./DrawerButton";
+import MenuIcon from "@mui/icons-material/Menu";
 import { fetchDocumentsByIds } from "../../backend/fetchDocumentsByIds";
 import { useAtom } from "jotai";
 
-const Drawer = () => {
+const CustomDrawer = ({ open, toggle }) => {
   const [user, setUser] = useAtom(userAtom);
   const [groups, setGroups] = useState([]);
+  const theme = useTheme();
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
 
   // Assuming setGroups is defined in your component to update the state with fetched groups
   useEffect(() => {
@@ -42,15 +54,15 @@ const Drawer = () => {
   };
 
   return (
-    <Stack
-      component={Paper}
-      elevation={2}
-      width={150}
-      height={"100%"}
-      spacing={1}
-      padding={1}
+    <Drawer
+      open={isLargeScreen ? true : open}
+      variant={isLargeScreen ? "permanent" : "temporary"}
+      onClose={toggle}
+      ModalProps={{
+        keepMounted: true, // Better performance on mobile devices.
+      }}
     >
-      <CustomAvatar />
+      {user.id && <CustomAvatar />}
       <Divider />
       <DrawerButton title={"Můj kalendář"} linkTo={"/main"} />
       <DrawerButton title={"Odhlásit"} onClick={handleLogout} linkTo={"/"} />
@@ -59,11 +71,17 @@ const Drawer = () => {
       <DrawerButton title={"Nová skupina"} linkTo={"/groupcreation"} />
       <DrawerButton title={"Připojit se"} linkTo={"/groupjoin"} />
       <Divider />
-      {groups && groups.map(group => {
-        return <DrawerButton title={group.name} group={group} linkTo={"/group"} />
-      })}
-    </Stack>
+      {groups &&
+        groups.map((group, index) => (
+          <DrawerButton
+            key={index}
+            title={group.name}
+            group={group}
+            linkTo={"/group"}
+          />
+        ))}
+    </Drawer>
   );
 };
 
-export default Drawer;
+export default CustomDrawer;

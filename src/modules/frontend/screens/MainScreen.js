@@ -1,15 +1,21 @@
 import "react-calendar/dist/Calendar.css";
 
-import { Button, Typography } from "@mui/material";
+import { Button, Drawer, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 
 import CustomCalendar from "../components/CustomCalendar";
-import Drawer from "../components/Drawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
 import { formatDate } from "../functions/formatDate";
 import { updateFirestoreDocument } from "../../backend/updateFirestoreDocument";
 import { useAtom } from "jotai";
 import { userAtom } from "../state/state";
+
+//import Drawer from "../components/Drawer";
+
+
+
+
+
 
 const MainScreen = () => {
   const [user, setUser] = useAtom(userAtom);
@@ -40,7 +46,6 @@ const MainScreen = () => {
     <FullScreenColorContainer
       alignItems={"center"}
       justifyContent={"center"}
-      Drawer={<Drawer />}
       spacing={2}
     >
       <Typography variant="h4">Můj kalendář</Typography>
