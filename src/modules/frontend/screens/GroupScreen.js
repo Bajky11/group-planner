@@ -36,9 +36,9 @@ const GroupScreen = () => {
     const groupUsersDates = groupUsers.flatMap((user) =>
       user.dates
         ? convertFirestoreTimestampsToDates(user.dates).map((date) => ({
-            ...date,
-            color: user.color,
-          }))
+          ...date,
+          color: user.color,
+        }))
         : []
     );
 
@@ -68,22 +68,25 @@ const GroupScreen = () => {
     >
       <Typography variant="h4">{group.name}</Typography>
       <Typography>ID: {group.id}</Typography>
-      <CustomCalendar dates={dates}/>
+      <CustomCalendar dates={dates} />
       <Typography>Členové skupiny:</Typography>
-      {groupUsers.map((user) => (
-        <Stack key={user.id} direction="row" spacing={1} alignItems="center">
-          <div
-            style={{
-              backgroundColor: user.color || "grey",
-              width: "10px",
-              height: "10px",
-            }}
-          ></div>
-          <Typography>
-            {user.firstName} {user.lastName} ({user.username})
-          </Typography>
-        </Stack>
-      ))}
+      <Stack maxHeight={100}>
+
+        {groupUsers.map((user) => (
+          <Stack key={user.id} direction="row" spacing={1} alignItems="center">
+            <div
+              style={{
+                backgroundColor: user.color || "grey",
+                width: "10px",
+                height: "10px",
+              }}
+            ></div>
+            <Typography>
+              {user.firstName} {user.lastName} ({user.username})
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
     </FullScreenColorContainer>
   );
 };

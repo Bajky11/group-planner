@@ -1,6 +1,6 @@
 import "react-calendar/dist/Calendar.css";
 
-import { Button, Drawer, Typography } from "@mui/material";
+import { Button, Drawer, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 
 import CustomCalendar from "../components/CustomCalendar";
@@ -54,12 +54,14 @@ const MainScreen = () => {
         dates={user.dates}
       />
       <Typography>Kliknutím odstraníš záznam:</Typography>
+      <Stack maxHeight={100}>
+
       {user.dates.map((date, index) => (
         <Button
-          key={index}
-          color="error"
-          style={{ margin: "10px" }}
-          onClick={() => handleRemoveDate(index)}
+        key={index}
+        color="error"
+        style={{ margin: "10px" }}
+        onClick={() => handleRemoveDate(index)}
         >
           {formatDate(date.start)} - {formatDate(date.end)}
           <div
@@ -70,9 +72,10 @@ const MainScreen = () => {
               display: "inline-block",
               marginLeft: "10px",
             }}
-          ></div>
+            ></div>
         </Button>
       ))}
+      </Stack>
     </FullScreenColorContainer>
   );
 };

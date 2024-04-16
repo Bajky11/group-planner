@@ -166,7 +166,7 @@ const LoginScreen = () => {
           )}
         </Stack>
       </Paper>
-      alpha version: 16.4.2024
+      alpha version: 16.4.2024.2
     </FullScreenColorContainer>
   );
 };
