@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { handleLogin } from '../functions/handleLogin';
 
 const LandingPage = () => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const handleLoginButtonPress = () => {
         setOpen(!open)
@@ -86,7 +86,7 @@ const LandingPage = () => {
                                 </Button>
                             </Grid>
                             <Grid>
-                                <Button color="secondary" size='large' variant='text'>
+                                <Button color="secondary" size='large' variant='text' onClick={() => navigate("/login")}>
                                     Vytvořit účet
                                 </Button>
                             </Grid>
@@ -129,25 +129,33 @@ const LandingPage = () => {
                             name="username"
                             label={"přihlašovací jméno"}
                             color={"secondary"}
-                        onChange={handleInputChange}
-                        value={form.username}
+                            onChange={handleInputChange}
+                            value={form.username}
+                            focused
+                            sx={{ input: { color: 'white' } }}
                         />
                         <TextField
                             name="password"
                             label={"heslo"}
                             type="password"
                             color={"secondary"}
-                        onChange={handleInputChange}
-                        value={form.password}
+                            onChange={handleInputChange}
+                            value={form.password}
+                            focused
+                            sx={{ input: { color: 'white' } }}
+
+
                         />
 
                         <Button variant="contained"
                             color='secondary'
                             onClick={() => handleLogin(form.username, form.password).then((data) => data && setUser(data))}
+                            sx={{ color: "White" }}
                         >
                             Přihlásit
                         </Button>
 
+                        <Typography size={"small"}>alpha version: 19.4.2024.1</Typography>
                     </Stack>
                 </Box>
             </Modal>

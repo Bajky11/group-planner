@@ -33,6 +33,8 @@ const theme = createTheme({
   },
 });
 
+// <Router basename="group-planner">
+
 function App() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -40,7 +42,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Routes>
-          <Route path="/" element={isSmallScreen ? <LoginScreen/> : <LandingPage />} />
+          <Route path="/" element={isSmallScreen ? <LoginScreen /> : <LandingPage />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/main" element={<MainScreen />} />
           <Route path="/group" element={<GroupScreen />} />
