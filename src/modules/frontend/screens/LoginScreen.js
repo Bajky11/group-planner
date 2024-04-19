@@ -23,14 +23,15 @@ import { db } from "../../.."; // Ujistěte se, že tato cesta je správná pro 
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 import { userAtom } from "../state/state";
+import { handleLogin } from "../functions/handleLogin";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
     password: "",
-    firstName: "", // pro registraci
-    lastName: "", // pro registraci
+    firstName: "",
+    lastName: "",
   });
   const [user, setUser] = useAtom(userAtom);
   const [isRegistration, setIsRegistration] = useState(false);
@@ -44,44 +45,11 @@ const LoginScreen = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value); // Add this to check the values
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogin = async () => {
-    const hashedPassword = CryptoJS.SHA256(form.password).toString(
-      CryptoJS.enc.Hex
-    );
 
-    const usersRef = collection(db, "users");
-    const q = query(
-      usersRef,
-      where("username", "==", form.username),
-      where("password", "==", hashedPassword)
-    );
-
-    try {
-      const querySnapshot = await getDocs(q);
-      if (querySnapshot.docs.length > 0) {
-        // Předpokládáme, že uživatel je jedinečný a použijeme první dokument - TODO: jedinečnost není ošetřena
-        const userDoc = querySnapshot.docs[0];
-        const userData = userDoc.data();
-
-        setUser({
-          id: userDoc.id,
-          username: userData.username,
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          groups: userData.groups,
-          dates: convertFirestoreTimestampsToDates(userData.dates)
-        });
-      } else {
-        alert("Nesprávné přihlašovací údaje");
-      }
-    } catch (error) {
-      console.error("Error during user login: ", error);
-      alert("Při přihlašování došlo k chybě");
-    }
-  };
 
   const handleRegistration = async () => {
     if (form.username === "" || form.password === "") {
@@ -156,7 +124,7 @@ const LoginScreen = () => {
             </Button>
           ) : (
             <>
-              <Button variant="contained" onClick={handleLogin}>
+              <Button variant="contained" onClick={() => handleLogin(form.username, form.password).then((data) => data && setUser(data))}>
                 Přihlásit
               </Button>
               <Button onClick={() => setIsRegistration(true)}>
