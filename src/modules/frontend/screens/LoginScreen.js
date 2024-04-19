@@ -50,13 +50,19 @@ const LoginScreen = () => {
   };
 
 
-
   const handleRegistration = async () => {
     if (form.username === "" || form.password === "") {
       alert("Zadané údaje nejsou platné");
       return;
     }
-
+  
+    // Query the database to check if the username already exists
+    const querySnapshot = await getDocs(query(collection(db, "users"), where("username", "==", form.username)));
+    if (!querySnapshot.empty) {
+      alert("Uživatelské jméno již existuje. Zvolte prosím jiné.");
+      return;
+    }
+  
     try {
       const docRef = await addDoc(collection(db, "users"), {
         username: form.username,
@@ -75,6 +81,7 @@ const LoginScreen = () => {
       console.error("Error adding document: ", e);
     }
   };
+  
 
   return (
     <FullScreenColorContainer alignItems={"center"} justifyContent={"center"}>
@@ -134,7 +141,7 @@ const LoginScreen = () => {
           )}
         </Stack>
       </Paper>
-      alpha version: 16.4.2024.3
+      alpha version: 19.4.2024.2
     </FullScreenColorContainer>
   );
 };

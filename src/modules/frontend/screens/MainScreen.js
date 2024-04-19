@@ -10,13 +10,6 @@ import { updateFirestoreDocument } from "../../backend/updateFirestoreDocument";
 import { useAtom } from "jotai";
 import { userAtom } from "../state/state";
 
-//import Drawer from "../components/Drawer";
-
-
-
-
-
-
 const MainScreen = () => {
   const [user, setUser] = useAtom(userAtom);
 
@@ -56,25 +49,25 @@ const MainScreen = () => {
       <Typography>Kliknutím odstraníš záznam:</Typography>
       <Stack maxHeight={100}>
 
-      {user.dates.map((date, index) => (
-        <Button
-        key={index}
-        color="error"
-        style={{ margin: "10px" }}
-        onClick={() => handleRemoveDate(index)}
-        >
-          {formatDate(date.start)} - {formatDate(date.end)}
-          <div
-            style={{
-              backgroundColor: date.color || "grey",
-              width: "10px",
-              height: "10px",
-              display: "inline-block",
-              marginLeft: "10px",
-            }}
+        {user.dates.map((date, index) => (
+          <Button
+            key={index}
+            color="error"
+            style={{ margin: "10px" }}
+            onClick={() => handleRemoveDate(index)}
+          >
+            {formatDate(date.start)} - {formatDate(date.end)}
+            <div
+              style={{
+                backgroundColor: date.color || "grey",
+                width: "10px",
+                height: "10px",
+                display: "inline-block",
+                marginLeft: "10px",
+              }}
             ></div>
-        </Button>
-      ))}
+          </Button>
+        ))}
       </Stack>
     </FullScreenColorContainer>
   );

@@ -40,7 +40,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <Router basename="group-planner">
         <Routes>
           <Route path="/" element={isSmallScreen ? <LoginScreen /> : <LandingPage />} />
           <Route path="/login" element={<LoginScreen />} />

@@ -155,7 +155,7 @@ const LandingPage = () => {
                             Přihlásit
                         </Button>
 
-                        <Typography size={"small"}>alpha version: 19.4.2024.1</Typography>
+                        <Typography size={"small"}>alpha version: 19.4.2024.2</Typography>
                     </Stack>
                 </Box>
             </Modal>
