@@ -61,6 +61,7 @@ const CustomDrawer = ({ open, toggle }) => {
       ModalProps={{
         keepMounted: true, // Better performance on mobile devices.
       }}
+      sx={{width: "150px"}}
     >
       {user.id && <CustomAvatar />}
       <Divider />

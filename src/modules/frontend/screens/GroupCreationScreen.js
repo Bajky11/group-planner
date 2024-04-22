@@ -12,6 +12,7 @@ import { updateArrayFieldInDocument } from "../../backend/updateArrayFieldInDocu
 import { updateFirestoreDocument } from "../../backend/updateFirestoreDocument";
 import { useAtom } from "jotai";
 import { userAtom } from "../state/state";
+import { useNavigate } from "react-router-dom";
 
 const users = [
   { username: "Lukas Cerny" },
@@ -28,6 +29,8 @@ const GroupCreationScreen = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [user, setUser] = useAtom(userAtom);
+  const [disable, setDisable] = useState(false);
+  const navigate = useNavigate();
 
   const hasMounted = useRef(false);
   useEffect(() => {
@@ -59,6 +62,11 @@ const GroupCreationScreen = () => {
   }
 
   const createGroup = async () => {
+    if(groupName == ""){
+      alert("Jméno skupiny je prázdné!")
+      return;
+    }
+
     try {
       const groupId = await addFirestoreDocument("groups", {
         name: groupName,
@@ -69,7 +77,7 @@ const GroupCreationScreen = () => {
       updateArrayFieldInDocument("users", user.id, "groups", [groupId]);
 
       setUser({ ...user, groups: updatedGroups });
-
+      navigate("/main")
       //TODO: Optionally, add group ID to each selected user's groups in the backend
     } catch (error) {
       console.error("Failed to create group:", error);
@@ -78,9 +86,8 @@ const GroupCreationScreen = () => {
 
   return (
     <FullScreenColorContainer
-      alignItems="center"
-      justifyContent="center"
-      Drawer={<Drawer />}
+      alignItems="stretch"
+      justifyContent="flex-start"
       spacing={2}
     >
       <Typography variant="h3">Tvorba skupiny</Typography>
@@ -89,17 +96,13 @@ const GroupCreationScreen = () => {
         dokončena. Uživatelé se do skupiny připojí skrze tlačítko PŘIPOJIT SE a
         ID skupiny.
       </Typography>
-      <Paper
-        sx={{ padding: 3, width: "100%", maxWidth: "1000px" }}
-        elevation={2}
-      >
-        {" "}
+      
         {/* Adjusted for responsiveness */}
-        <Grid container spacing={2} alignItems="stretch">
+        <Grid container spacing={2} alignItems="stretch" direction={"column"}>
           {" "}
           {/* alignItems stretch for full height */}
           {/* Left Grid item */}
-          <Grid xs={12} md={6} item container direction="column" spacing={2}>
+          <Grid   item container direction="column" spacing={2}>
             <Grid>
               <TextField
                 fullWidth
@@ -131,10 +134,13 @@ const GroupCreationScreen = () => {
               ))}
             </Grid>
           </Grid>
+          <Grid>
+              <Divider color="grey"/>
+            </Grid>
           {/* Right Grid item */}
-          <Grid xs={12} md={6} container direction="column" spacing={2}>
+          <Grid container direction="column" spacing={2}>
             <Grid>
-              <Typography paddingLeft={1}>
+              <Typography paddingLeft={1} variant="h5">
                 {groupName || "Název skupiny"}
               </Typography>
             </Grid>
@@ -149,6 +155,7 @@ const GroupCreationScreen = () => {
                     key={index}
                     onClick={() => onRemove(user)}
                     color="error"
+                    sx={{width: "100px"}}
                   >
                     {user.username}
                   </Button>
@@ -157,7 +164,7 @@ const GroupCreationScreen = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Paper>
+      
       <Button variant={"contained"} onClick={createGroup}>
         Vytvořit
       </Button>

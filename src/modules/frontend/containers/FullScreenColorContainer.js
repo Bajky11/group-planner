@@ -25,16 +25,19 @@ const FullScreenColorContainer = ({
         display: "flex",
         flexDirection: "row",
         position: "relative",
+        paddingLeft:  drawerOpen ? "158px" : "16px",
+        paddingRight: "16px",
+        paddingTop: "40px"
       }}
     >
       {user.id && <CustomDrawer open={drawerOpen} toggle={toggleDrawer} />}
-      {!drawerOpen && user.id && (
+      {(!drawerOpen && user.id) && (
         <IconButton
           onClick={toggleDrawer}
           sx={{
             position: "absolute", // Absolutní pozicování vzhledem k nejbližšímu relativně pozicovanému předku
             top: 0, // Na vrchu kontejneru
-            left: 0, // Na levé straně kontejneru
+            left: 8, // Na levé straně kontejneru
             zIndex: 1201, // Zajistěte, že bude nad ostatními prvkami (drawer má obvykle zIndex okolo 1200)
           }}
         >
