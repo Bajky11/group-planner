@@ -42,20 +42,20 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-        <Router basename="group-planner">
-          <Routes>
-            <Route
-              path="/"
-              element={isSmallScreen ? <LoginScreen /> : <LandingPage />}
-            />
-            <Route path="/login" element={<LoginScreen />} />
-            <Route path="/main" element={<MainScreen />} />
-            <Route path="/group" element={<GroupScreen />} />
-            <Route path="/groupcreation" element={<GroupCreationScreen />} />
-            <Route path="/groupjoin" element={<GroupJoinScreen />} />
-            <Route path="/settings" element={<SettingsScreen />} />
-          </Routes>
-        </Router>
+      <Router basename="group-planner">
+        <Routes>
+          <Route
+            path="/"
+            element={isSmallScreen ? <LoginScreen /> : <LandingPage />}
+          />
+          <Route path="/login" element={<LoginScreen />} />
+          <Route path="/main" element={<MainScreen />} />
+          <Route path="/group" element={<GroupScreen />} />
+          <Route path="/groupcreation" element={<GroupCreationScreen />} />
+          <Route path="/groupjoin" element={<GroupJoinScreen />} />
+          <Route path="/settings" element={<SettingsScreen />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }

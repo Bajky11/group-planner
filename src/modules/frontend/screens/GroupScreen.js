@@ -1,9 +1,11 @@
-import { Stack, Typography } from "@mui/material";
+import { IconButton, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import CustomCalendar from "../components/CustomCalendar";
 import Drawer from "../components/CustomDrawer";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { convertFirestoreTimestampsToDates } from "../functions/convertFirestoreTimestampsToDates";
 import { fetchDocumentsByIds } from "../../backend/fetchDocumentsByIds";
 import { useLocation } from "react-router-dom";
@@ -17,15 +19,15 @@ const GroupScreen = () => {
   // Funkce pro načtení uživatelů skupiny
   const fetchGroupUsers = async () => {
     try {
-      const fetchedUsers = await fetchDocumentsByIds(
-        "users",
-        group.users.map((user) => user.id)
-      );
-      const usersWithColors = fetchedUsers.map((user) => ({
+      const groupUsersIds = group.users.map((user) => user.id);
+      const fetchedUsers = await fetchDocumentsByIds("users", groupUsersIds);
+      const updatedGroupUsers = fetchedUsers.map((user) => ({
         ...user,
         color: group.users.find((groupUser) => groupUser.id === user.id)?.color,
+        visible: true,
       }));
-      setGroupUsers(usersWithColors);
+      console.log(updatedGroupUsers);
+      setGroupUsers(updatedGroupUsers);
     } catch (error) {
       console.error("Error fetching groups:", error);
     }
@@ -33,15 +35,16 @@ const GroupScreen = () => {
 
   // Funkce pro zpracování dat uživatelů do dat kalendáře
   const processGroupUsersDates = () => {
-    const groupUsersDates = groupUsers.flatMap((user) =>
-      user.dates
-        ? convertFirestoreTimestampsToDates(user.dates).map((date) => ({
+    const groupUsersDates = groupUsers.flatMap((user) => {
+      if (user.visible && user.dates) {
+        return convertFirestoreTimestampsToDates(user.dates).map((date) => ({
           ...date,
           color: user.color,
-          name: user.username
-        }))
-        : []
-    );
+          name: user.username,
+        }));
+      }
+      return [];
+    });
     setDates(groupUsersDates);
   };
 
@@ -59,6 +62,16 @@ const GroupScreen = () => {
     }
   }, [groupUsers]);
 
+  function handleUserVisibilityChange(id) {
+    const updatedUsers = groupUsers.map((user) => {
+      if (user.id === id) {
+        user.visible = !user.visible;
+      }
+      return user;
+    });
+    setGroupUsers(updatedUsers);
+  }
+
   return (
     <FullScreenColorContainer
       alignItems="center"
@@ -71,21 +84,38 @@ const GroupScreen = () => {
       <CustomCalendar dates={dates} />
       <Typography>Členové skupiny:</Typography>
       <Stack maxHeight={100}>
-
-        {groupUsers.map((user) => (
-          <Stack key={user.id} direction="row" spacing={1} alignItems="center">
-            <div
-              style={{
-                backgroundColor: user.color || "grey",
-                width: "10px",
-                height: "10px",
-              }}
-            ></div>
-            <Typography>
-              {user.firstName} {user.lastName} ({user.username})
-            </Typography>
-          </Stack>
-        ))}
+        {groupUsers.map((user) => {
+          return (
+            <Stack
+              key={user.id}
+              direction="row"
+              spacing={1}
+              alignItems="center"
+            >
+              <IconButton
+                size="small"
+                onClick={() => handleUserVisibilityChange(user.id)}
+              >
+                {user.visible ? (
+                  <VisibilityOutlinedIcon />
+                ) : (
+                  <VisibilityOffOutlinedIcon />
+                )}
+              </IconButton>
+              <div
+                style={{
+                  backgroundColor: user.color || "grey",
+                  width: "15px",
+                  height: "15px",
+                  borderRadius: "5px",
+                }}
+              ></div>
+              <Typography>
+                {user.firstName} {user.lastName} ({user.username})
+              </Typography>
+            </Stack>
+          );
+        })}
       </Stack>
     </FullScreenColorContainer>
   );
