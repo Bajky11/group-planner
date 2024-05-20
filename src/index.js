@@ -23,6 +23,19 @@ const firebaseConfig = {
   measurementId: "G-LKC5QKHESV",
 };
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/group-planner/service-worker.js')
+      .then((registration) => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch((error) => {
+        console.log('ServiceWorker registration failed: ', error);
+      });
+  });
+}
+
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);

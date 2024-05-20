@@ -18,12 +18,11 @@ import { useEffect, useState } from "react";
 
 import CryptoJS from "crypto-js";
 import FullScreenColorContainer from "../containers/FullScreenColorContainer";
-import { convertFirestoreTimestampsToDates } from "../functions/convertFirestoreTimestampsToDates";
 import { db } from "../../.."; // Ujistěte se, že tato cesta je správná pro import instance Firestore
+import { handleLogin } from "../functions/handleLogin";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 import { userAtom } from "../state/state";
-import { handleLogin } from "../functions/handleLogin";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -45,7 +44,6 @@ const LoginScreen = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value); // Add this to check the values
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 

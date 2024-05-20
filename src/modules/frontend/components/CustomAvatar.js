@@ -7,8 +7,8 @@ import { userAtom } from "../state/state";
 const CustomAvatar = () => {
   const [user] = useAtom(userAtom);
   return (
-    <Stack direction={"row"} alignItems={"center"} gap={1} pl={1}>
-      <Avatar sx={{ width: 28, height: 28 }}>
+    <Stack direction={"row"} alignItems={"center"} gap={1} pl={1} py={1}>
+      <Avatar sx={{ width: 24, height: 24 }}>
         {user.firstName[0].toUpperCase()}
       </Avatar>
       <Typography>

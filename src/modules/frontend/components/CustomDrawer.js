@@ -8,12 +8,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { defaultUserObject, userAtom } from "../state/state";
 import { useEffect, useState } from "react";
 
 import CustomAvatar from "./CustomAvatar";
 import DrawerButton from "./DrawerButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { fetchDocumentsByIds } from "../../backend/fetchDocumentsByIds";
 import { useAtom } from "jotai";
 
@@ -22,7 +24,7 @@ const CustomDrawer = ({ open, toggle }) => {
   const [groups, setGroups] = useState([]);
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
-
+  const navigate = useNavigate();
   // Assuming setGroups is defined in your component to update the state with fetched groups
   useEffect(() => {
     let isMounted = true; // Flag to track whether the component is still mounted
@@ -49,24 +51,33 @@ const CustomDrawer = ({ open, toggle }) => {
   }, [user.groups]); // Dependency array includes user.groups
 
   const handleLogout = () => {
-    console.log("logout");
     setUser(defaultUserObject);
+    navigate("/");
   };
 
   return (
     <Drawer
       open={open}
-      variant={isLargeScreen ?  "permanent" : "temporary"}
+      variant={isLargeScreen ? "permanent" : "temporary"}
       onClose={toggle}
       ModalProps={{
         keepMounted: true, // Better performance on mobile devices.
       }}
-      sx={{width: "150px"}}
+      sx={{ width: "150px" }}
     >
       {user.id && <CustomAvatar />}
       <Divider />
+      <Stack direction={"row"}>
+        <IconButton onClick={handleLogout}>
+          <LogoutOutlinedIcon />
+        </IconButton>
+
+        <IconButton component={Link} to={"/settings"}>
+          <SettingsOutlinedIcon />
+        </IconButton>
+      </Stack>
+      <Divider />
       <DrawerButton title={"Můj kalendář"} linkTo={"/main"} />
-      <DrawerButton title={"Odhlásit"} onClick={handleLogout} linkTo={"/"} />
       <Divider />
       <Typography pl={1}>Skupiny</Typography>
       <DrawerButton title={"Nová skupina"} linkTo={"/groupcreation"} />
