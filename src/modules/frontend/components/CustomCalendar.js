@@ -25,39 +25,54 @@ const CustomCalendar = ({ onDatesChange, dates }) => {
         end,
         color: dynamicColor,
       };
-      onDatesChange([...dates, newDate])
+      onDatesChange([...dates, newDate]);
     }
   };
 
   const tileContent = ({ date, view }) => {
     if (view === "month") {
-      // Iteruje přes všechny vybrané datumové rozsahy
-      for (const range of dates) {
-        const { start, end, color } = range;
-        const isInRange = date >= start && date <= end;
-
-        // Pokud je aktuální datum uvnitř nějakého z rozsahů
-        if (isInRange) {
-          // Vrátí div prvek, který vyplní celé políčko kalendáře barvou
-          return (
-            <div
-              style={{
-                height: "100%", // Výška prveku je 100% rodiče
-                width: "150%", // Šířka prveku je 100% rodiče
-                backgroundColor: color, // Nastavuje barvu pozadí
-                opacity: 1, // Nastavuje průhlednost na plnou (1)
-                position: "relative", // Použijeme absolutní pozicování
-                left: "-10px", // Div začne na levém okraji buňky
-              }}
-            ></div>
-          );
-        }
+      // Najde všechny rozsahy, které obsahují aktuální datum
+      const rangesInDate = dates.filter(range => date >= range.start && date <= range.end);
+      
+      // Pokud existují rozsahy obsahující aktuální datum
+      if (rangesInDate.length > 0) {
+        return (
+          <div
+            style={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              gap: "2px",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {rangesInDate.map((range, index) => (
+              <div
+                key={index}
+                style={{
+                  height: "10%", // Výška prvku je 5% rodiče
+                  width: "150%", // Šířka prvku je 150% rodiče
+                  backgroundColor: range.color, // Nastavuje barvu pozadí
+                  opacity: 1, // Nastavuje průhlednost na plnou (1)
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "10px",
+                }}
+              >
+                <p style={{fontSize: "8px", color: "black"}}>{range.name &&range.name}</p>
+              </div>
+            ))}
+          </div>
+        );
       }
     }
-
+  
     // Vrátí null, pokud datum není v žádném vybraném rozsahu
     return null;
   };
+  
 
   return (
     <Paper elevation={2}>
@@ -66,8 +81,8 @@ const CustomCalendar = ({ onDatesChange, dates }) => {
           onChange={onChange}
           selectRange
           tileContent={tileContent}
-          tileClassName={"calendarTile"}
-          showDoubleView = {isLargeScreen ? true: false}
+          //tileClassName={"calendarTile"}
+          showDoubleView={isLargeScreen ? true : false}
           disabled={false}
         />
       </Stack>

@@ -38,10 +38,10 @@ const GroupScreen = () => {
         ? convertFirestoreTimestampsToDates(user.dates).map((date) => ({
           ...date,
           color: user.color,
+          name: user.username
         }))
         : []
     );
-
     setDates(groupUsersDates);
   };
 
@@ -62,7 +62,7 @@ const GroupScreen = () => {
   return (
     <FullScreenColorContainer
       alignItems="center"
-      justifyContent="center"
+      justifyContent="flex-start"
       Drawer={<Drawer />}
       spacing={1}
     >
