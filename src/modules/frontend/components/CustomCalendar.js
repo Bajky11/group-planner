@@ -51,9 +51,9 @@ const CustomCalendar = ({
         (range) => date >= range.start && date <= range.end
       );
 
-      const possibleRanges = possibleDates.filter(
+      const possibleRanges = possibleDates ? possibleDates.filter(
         (range) => date >= range.start && date <= range.end
-      );
+      ): [];
 
       // Pokud existují rozsahy obsahující aktuální datum
       if (rangesInDate.length > 0 || possibleRanges.length > 0) {
