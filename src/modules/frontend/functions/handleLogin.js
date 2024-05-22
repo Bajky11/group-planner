@@ -1,4 +1,3 @@
-import CryptoJS from "crypto-js";
 import {
     addDoc,
     collection,
@@ -7,13 +6,13 @@ import {
     query,
     where,
 } from "firebase/firestore";
-import { db } from "../../.."; // Ujistěte se, že tato cesta je správná pro import instance Firestore
+
+import CryptoJS from "crypto-js";
 import { convertFirestoreTimestampsToDates } from "./convertFirestoreTimestampsToDates";
+import { db } from "../../.."; // Ujistěte se, že tato cesta je správná pro import instance Firestore
 
 export const handleLogin = async ( username, password ) => {
-    if (username ==  undefined || password == undefined) return;
-
-    console.log(username, password)
+    if (username ===  undefined || password === undefined) return;
 
     const hashedPassword = CryptoJS.SHA256(password).toString(
         CryptoJS.enc.Hex

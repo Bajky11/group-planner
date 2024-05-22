@@ -31,14 +31,12 @@ const LandingPage = () => {
 
   useEffect(() => {
     if (user.id) {
-      console.log("Logged user: " + JSON.stringify(user));
       navigate("/main");
     }
   }, [user, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value); // Add this to check the values
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 

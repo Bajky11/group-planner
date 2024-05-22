@@ -37,7 +37,6 @@ const LoginScreen = () => {
 
   useEffect(() => {
     if (user.id) {
-      console.log("Logged user: " + JSON.stringify(user));
       navigate("/main");
     }
   }, [user, navigate]);
