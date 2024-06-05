@@ -44,7 +44,7 @@ function App() {
   return (
     <StateWatcherContainer>
       <ThemeProvider theme={theme}>
-        <Router basename="group-planner">
+        <Router>
           <Routes>
             <Route
               path="/"
