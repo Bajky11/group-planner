@@ -1,0 +1,1 @@
+homepage attribute for hosting site on gh-pages: "homepage": "https://Bajky11.github.io/group-planner",
